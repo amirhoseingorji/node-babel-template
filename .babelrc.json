@@ -5,8 +5,11 @@
   "plugins": [
     ["module-resolver", {
       "alias": {
-        "#routes": "./src/routes",
+        "#routes": "./src/routes"
       }
-    }]
+    }],
+    ["@babel/transform-runtime"],
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose" : false }]
   ]
 }
