@@ -1,10 +1,8 @@
 import jwt from 'jsonwebtoken';
-import BaseApi from './BaseApi.mjs';
+import BaseApi from './BaseApi.js';
 import _ from 'lodash';
 //todo muset be out of here
-
 import { Joi } from 'celebrate';
-
 const { valid, get, post, put, socket } = BaseApi;
 export default class Api extends BaseApi {
   @get

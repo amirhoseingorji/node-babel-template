@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon --exec babel-node ./src/index.js",
+    "dev": "set DEV = true && nodemon --exec babel-node ./src/index.js",
     "clean": "rimraf -rf dist",
     "build": "npm run clean && babel ./src --out-dir dist --copy-files",
     "prod": "node ./dist/index.js",
@@ -11,6 +11,7 @@
     "format": "prettier --write \"src/**/*.js\""
   },
   "dependencies": {
+    "@babel/plugin-transform-destructuring": "^7.12.13",
     "@babel/plugin-transform-runtime": "^7.12.15",
     "@babel/runtime": "^7.12.13",
     "base-64": "^1.0.0",

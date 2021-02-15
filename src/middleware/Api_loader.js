@@ -3,6 +3,7 @@ import { celebrate, Joi, errors, Segments, CelebrateError } from 'celebrate';
 import simpleGit from 'simple-git';
 import { exec } from 'child_process';
 import util from 'util';
+import {resolve:absoluter} from "path";
 const aexec = util.promisify(exec);
 const methods = ["GET", "POST", "DELETE", "OPTIONS", "PUT", "PATCH", "COPY", "HEAD", "SOCKET"];
 export default class Api_loader {
@@ -65,6 +66,7 @@ export default class Api_loader {
     // 'any.required': '{#label} می بایست ارسال شود'
   };
   api_importer = async (dir, reculsive = false) => {
+      console.log(resolve("../api"))
     return new Promise((resolve) => {
       glob(dir + '/**/*.js', async (err, files) => {
         let obj = {};

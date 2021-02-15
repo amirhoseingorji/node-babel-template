@@ -12,7 +12,7 @@ import fileUpload from 'express-fileupload';
 //middlewares
 import Api_Loader from './middleware/Api_loader.js';
 import Model_loader from './middleware/Model_loader.js';
-import Logger from './middleware/logger.mjs';
+import Logger from './middleware/logger.js';
 //orm
 import Sequelize from 'sequelize';
 import redis from 'redis';

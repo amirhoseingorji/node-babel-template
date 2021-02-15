@@ -1,14 +1,11 @@
 {
   "presets": [
     "@babel/preset-env"
+    ,["minify",{"mangle":true}]
   ],
   "plugins": [
-    ["module-resolver", {
-      "alias": {
-        "#routes": "./src/routes"
-      }
-    }],
     ["@babel/transform-runtime"],
+    ["@babel/plugin-transform-destructuring"],
     ["@babel/plugin-proposal-decorators", { "legacy": true }],
     ["@babel/plugin-proposal-class-properties", { "loose" : false }]
   ]

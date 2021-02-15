@@ -1,4 +1,4 @@
-import BaseModel from '../BaseModel.mjs';
+import BaseModel from '../BaseModel';
 export default class User extends BaseModel {
   schema = {
     ...this.schema,

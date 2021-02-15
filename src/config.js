@@ -1,5 +1,4 @@
 import fs from 'fs';
-//console.log(process.env);
 export default {
   port: 3001,
   base_path: '/src/api',
