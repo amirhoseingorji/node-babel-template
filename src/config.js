@@ -1,8 +1,8 @@
 import fs from 'fs';
 export default {
   port: 3001,
-  base_path: '/src/api',
-  model_path: '/src/models',
+  base_path: '/api',
+  model_path: '/models',
   connection: {
     database: 'light_city',
     password: 'it@ndishmand',
@@ -33,7 +33,7 @@ export default {
     baseUrl:
       (process.env.HOMEDRIVE == 'C:'
         ? 'http://localhost:3001'
-        : 'https://lighthouse.sitenevis.com') + '/src/api',
+        : 'https://lighthouse.sitenevis.com') + '/api',
   },
   api_info: {
     name: 'light_house' + (process.env.HOMEDRIVE == 'C:' ? '_local' : ''),
@@ -44,66 +44,56 @@ export default {
     type: 'oauth2',
     oauth2: [
       {
-        key: 'tokenType',
-        value: '',
-        type: 'string',
+        "key": "tokenName",
+        "value": "light_token",
+        "type": "string"
       },
       {
-        key: 'accessToken',
-        value: '',
-        type: 'string',
+        "key": "challengeAlgorithm",
+        "value": "S256",
+        "type": "string"
       },
       {
-        key: 'headerPrefix',
-        value: 'Bearer',
-        type: 'string',
+        "key": "username",
+        "value": "{{user}}",
+        "type": "string"
       },
       {
-        key: 'clientId',
-        value: '{{user}}',
-        type: 'string',
+        "key": "password",
+        "value": "{{pass}}",
+        "type": "string"
       },
       {
-        key: 'clientSecret',
-        value: '{{secret}}',
-        type: 'string',
+        "key": "grant_type",
+        "value": "password_credentials",
+        "type": "string"
       },
       {
-        key: 'client_authentication',
-        value: 'header',
-        type: 'string',
+        "key": "clientSecret",
+        "value": "{{secret}}",
+        "type": "string"
       },
       {
-        key: 'username',
-        value: '{{user}}',
-        type: 'string',
+        "key": "clientId",
+        "value": "{{user}}",
+        "type": "string"
       },
       {
-        key: 'password',
-        value: '{{pass}}',
-        type: 'string',
+        "key": "addTokenTo",
+        "value": "header",
+        "type": "string"
       },
       {
-        key: 'accessTokenUrl',
-        value: '{{baseUrl}}/user/login',
-        type: 'string',
+        "key": "client_authentication",
+        "value": "header",
+        "type": "string"
       },
       {
-        key: 'tokenName',
-        value: 'light_token',
-        type: 'string',
-      },
-      {
-        key: 'grant_type',
-        value: 'password_credentials',
-        type: 'string',
-      },
-      {
-        key: 'addTokenTo',
-        value: 'header',
-        type: 'string',
-      },
-    ],
+        "key": "accessTokenUrl",
+        "value": "{{baseUrl}}/user/login",
+        "type": "string"
+      }
+    ]
   },
   login_auth: {
     type: 'bearer',

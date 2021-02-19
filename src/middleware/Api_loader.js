@@ -1,9 +1,11 @@
 import glob from 'glob';
 import { celebrate, Joi, errors, Segments, CelebrateError } from 'celebrate';
+import swaggerUi from 'swagger-ui-express';
 import simpleGit from 'simple-git';
 import { exec } from 'child_process';
 import util from 'util';
-import {resolve:absoluter} from "path";
+import {resolve} from "path";
+import apis from "../api/user";
 const aexec = util.promisify(exec);
 const methods = ["GET", "POST", "DELETE", "OPTIONS", "PUT", "PATCH", "COPY", "HEAD", "SOCKET"];
 export default class Api_loader {
@@ -12,10 +14,80 @@ export default class Api_loader {
     this.shared = shared;
     this.base_path = base_path;
     if (!app) return console.log('app is not presented');
-    let api = await this.api_importer(process.cwd() + base_path);
+    let api = await this.api_importer(resolve(__dirname+"./.."+base_path));
     this.api_postman_items = [];
+    app.use(this.base_path +'/swagger', swaggerUi.serve, swaggerUi.setup({
+      openapi: "3.0.1",
+      info: {
+        title: "name",
+        version: "v1"
+      },
+      paths:{
+        "/api/v1/Inspection/GetInspectionHistory": {
+          "post": {
+            "tags": [
+              "Inspection"
+            ],
+            "requestBody": {
+              "content": {
+                "application/json-patch+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GetInspectionRequestModel"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GetInspectionRequestModel"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GetInspectionRequestModel"
+                  }
+                },
+                "application/*+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GetInspectionRequestModel"
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "Success",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/OutPut"
+                    }
+                  }
+                }
+              },
+              "400": {
+                "description": "Bad Request",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    }
+                  }
+                }
+              },
+              "500": {
+                "description": "Server Error"
+              }
+            }
+          }
+        },
+      },
+      components:{
+        schemas:{
+
+        }
+      }
+    }));
     app.get(this.base_path + '/postman', async (req, res) => {
-      let item = this.api_postman_items; //[await this.api_postman(base_path)]
+      let item = this.api_postman_items;
       let variable = [];
       for (let i in shared.api_variables)
         variable.push({
@@ -42,6 +114,7 @@ export default class Api_loader {
         { ...shared, Joi },
         path.slice(base_path.length),
       );
+
       await this.app_loader(app,api_item, path);
       if (io) {
         let io_space = io.of(base_path);
@@ -66,8 +139,8 @@ export default class Api_loader {
     // 'any.required': '{#label} می بایست ارسال شود'
   };
   api_importer = async (dir, reculsive = false) => {
-      console.log(resolve("../api"))
-    return new Promise((resolve) => {
+      
+    return new Promise((res) => {
       glob(dir + '/**/*.js', async (err, files) => {
         let obj = {};
         for (let file of files) {
@@ -84,14 +157,15 @@ export default class Api_loader {
             ).default;
             obj = { ...obj, ...add };
           } else {
-            obj[file.slice(process.cwd().length + 1).split('.js')[0]] = (
+            let cut = resolve(__dirname+"./../").length+1
+            obj[file.slice(cut).split('.js')[0]] = (
               await import(
                 (process.env.HOMEDRIVE == 'C::' ? 'file:///' : '') + file
               )
             ).default;
           }
         }
-        resolve(obj);
+        res(obj);
       });
     });
   };
@@ -141,7 +215,7 @@ export default class Api_loader {
     ];
     for (let method of methods)
       for (let apii in api[method]) {
-        let validation = await api[method][apii].validators;
+        let validation = await api[method][apii].valid;
 
         app[method.toLocaleLowerCase()](
           `/${path}/${apii.replace('_', '/')}`,
@@ -174,10 +248,10 @@ export default class Api_loader {
           },
         );
       }
-    if (api.postman)
-      this.api_postman_items.push(
-        await api.postman(path.slice(this.base_path.length)),
-      );
+    // if (api.postman)
+    //   this.api_postman_items.push(
+    //     await api.postman(path.slice(this.base_path.length)),
+    //   );
   };
   //todo important recheck
   socket_loader = (api, path) => async (

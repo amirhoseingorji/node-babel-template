@@ -4,6 +4,7 @@
     ,["minify",{"mangle":true}]
   ],
   "plugins": [
+    ["wildcard"],
     ["@babel/transform-runtime"],
     ["@babel/plugin-transform-destructuring"],
     ["@babel/plugin-proposal-decorators", { "legacy": true }],

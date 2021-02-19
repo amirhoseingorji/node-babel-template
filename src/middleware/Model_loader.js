@@ -1,9 +1,10 @@
 import glob from 'glob';
 import { Joi } from 'celebrate';
+import {resolve} from "path";
 export default class Model_loader {
   async init(params) {
     var { model_path, sequelize, DataTypes, fn, sync } = params;
-    let models = await this.importer(process.cwd() + model_path);
+    let models = await this.importer(resolve(__dirname+"./.."+model_path));
     let cJoi = {
       INTEGER: 'number',
       TEXT: 'string',
